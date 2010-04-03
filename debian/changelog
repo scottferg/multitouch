@@ -1,4 +1,10 @@
-magicmouse (1.0) UNRELEASED; urgency=low
+magicmouse (1.1) UNRELEASED; urgency=low
+
+  * Fix package to be binary-indep
+
+ -- Chase Douglas <chase.douglas@ubuntu.com>  Sat, 03 Apr 2010 15:21:53 -0400
+
+magicmouse (1.0) lucid; urgency=low
 
   * Initial package
 
