@@ -23,6 +23,7 @@ HID_MODULES = 	hid \
 		hid-kensington \
 		hid-kye \
 		hid-logitech \
+		hid-magicmouse \
 		hid-microsoft \
 		hid-monterey \
 		hid-ntrig \
