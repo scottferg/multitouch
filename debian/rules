@@ -1,0 +1,55 @@
+#!/usr/bin/make -f
+# Copyright (C) 2009 Alberto Milone
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+DRIVER_NAME := magicmouse
+VERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1 | cut -d\: -f2)
+PKG_kernel_src  := magicmouse-kernel-source
+
+HID_MODULES=hid apple
+
+HID_MODULES = 	hid \
+		hid-a4tech \
+		hid-apple \
+		hid-belkin \
+		hid-cherry \
+		hid-chicony \
+		hid-cypress \
+		hid-drff \
+		hid-ezkey \
+		hid-gaff \
+		hid-gyration \
+		hid-kensington \
+		hid-kye \
+		hid-logitech \
+		hid-microsoft \
+		hid-monterey \
+		hid-ntrig \
+		hid-ortek \
+		hid-petalynx \
+		hid-pl \
+		hid-samsung \
+		hid-sjoy \
+		hid-sony
+
+export i := 2
+configure/$(PKG_kernel_src)::
+	#Replace important strings
+	for i in dkms.conf $(PKG_kernel_src).install; do \
+		sed -e "s|#VERSION#|$(VERSION)|" debian/$$i.in > debian/$$i; \
+	done
+	for NAME in $(HID_MODULES); do \
+		echo >> debian/dkms.conf; \
+		echo "BUILT_MODULE_NAME[$${i}]=\"$${NAME}\"" >> debian/dkms.conf; \
+		echo "BUILT_MODULE_LOCATION[$${i}]=\"drivers/hid\"" >> debian/dkms.conf; \
+		echo "DEST_MODULE_LOCATION[$${i}]=\"/updates/dkms\"" >> debian/dkms.conf; \
+		i=`expr $${i} + 1`; \
+	done
+
+clean::
+	rm -f debian/dkms.conf \
+	debian/$(PKG_kernel_src).install
+	rm -Rf $(CURDIR)/$(PKG_kernel_src)
+	rm -f $(CURDIR)/debian/magicmouse
+

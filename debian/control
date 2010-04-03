@@ -1,0 +1,13 @@
+Source: magicmouse
+Section: admin
+Priority: optional
+Maintainer: Chase Douglas <chase.douglas@ubuntu.com>
+Standards-Version: 3.8.4
+Build-Depends: debhelper (>= 5), cdbs
+Vcs-Git: git://kernel.ubuntu.com/cndougla/magicmouse.git
+
+Package: magicmouse-kernel-source
+Architecture: any
+Depends: ${misc:Depends}, dkms, linux-libc-dev, libc6-dev, linux-headers-generic
+Description: Apple Magic Mouse driver source
+ This package contains driver source for the Apple Magic Mouse.

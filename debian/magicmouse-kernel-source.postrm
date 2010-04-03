@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+#DEBHELPER#
+
+case "$1" in
+	remove|purge)
+		# Update initramfs
+		update-initramfs -u
+		;;
+esac
+
+#DEBHELPER#

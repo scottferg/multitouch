@@ -1,0 +1,5 @@
+drivers			/usr/src/magicmouse-#VERSION#
+include			/usr/src/magicmouse-#VERSION#
+Makefile		/usr/src/magicmouse-#VERSION#
+net			/usr/src/magicmouse-#VERSION#
+debian/dkms.conf	/usr/src/magicmouse-#VERSION#
