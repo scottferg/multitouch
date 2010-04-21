@@ -1,13 +1,15 @@
-Source: magicmouse
+Source: multitouch
 Section: admin
 Priority: optional
 Maintainer: Chase Douglas <chase.douglas@ubuntu.com>
 Standards-Version: 3.8.4
 Build-Depends: debhelper (>= 5), cdbs
-Vcs-Git: git://kernel.ubuntu.com/cndougla/magicmouse.git
+Vcs-Git: git://kernel.ubuntu.com/cndougla/multitouch.git
 
-Package: magicmouse-kernel-source
+Package: multitouch-kernel-source
 Architecture: all
 Depends: ${misc:Depends}, dkms, linux-libc-dev, libc6-dev, linux-headers-generic
-Description: Apple Magic Mouse driver source
- This package contains driver source for the Apple Magic Mouse.
+Conflicts: magicmouse-kernel-source
+Description: Experimental multitouch device driver source
+ This package contains multitouch related fixes and new drivers for the Apple
+ Magic Mouse, and Egalax and Cando touchscreens

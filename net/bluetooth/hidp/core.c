@@ -48,7 +48,7 @@
 
 #include "hidp.h"
 
-#define VERSION "1.2~magicmouse"
+#define VERSION "1.2~multitouch"
 
 static DECLARE_RWSEM(hidp_session_sem);
 static LIST_HEAD(hidp_session_list);

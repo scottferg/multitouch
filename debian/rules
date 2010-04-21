@@ -3,9 +3,8 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 
-DRIVER_NAME := magicmouse
 VERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1 | cut -d\: -f2)
-PKG_kernel_src  := magicmouse-kernel-source
+PKG_kernel_src  := multitouch-kernel-source
 
 HID_MODULES=hid apple
 
@@ -54,5 +53,5 @@ clean::
 	rm -f debian/dkms.conf \
 	debian/$(PKG_kernel_src).install
 	rm -Rf $(CURDIR)/$(PKG_kernel_src)
-	rm -f $(CURDIR)/debian/magicmouse
+	rm -f $(CURDIR)/debian/multitouch
 

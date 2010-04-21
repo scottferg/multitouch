@@ -1,8 +1,9 @@
-magicmouse (1.2) UNRELEASED; urgency=low
+multitouch (1.2) UNRELEASED; urgency=low
 
   * Add hid-cando driver
   * hid-egalax MT fixes
   * Let hid-input accept digitizers
+  * Rename package to multitouch-kernel-source
 
  -- Chase Douglas <chase.douglas@ubuntu.com>  Wed, 21 Apr 2010 14:18:42 -0400
 

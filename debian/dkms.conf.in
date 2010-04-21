@@ -1,4 +1,4 @@
-PACKAGE_NAME="magicmouse"
+PACKAGE_NAME="multitouch"
 PACKAGE_VERSION="#VERSION#"
 CLEAN="rm -f *.*o"
 AUTOINSTALL="yes"

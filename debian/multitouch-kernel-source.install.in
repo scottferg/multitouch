@@ -1,0 +1,5 @@
+drivers			/usr/src/multitouch-#VERSION#
+include			/usr/src/multitouch-#VERSION#
+Makefile		/usr/src/multitouch-#VERSION#
+net			/usr/src/multitouch-#VERSION#
+debian/dkms.conf	/usr/src/multitouch-#VERSION#
