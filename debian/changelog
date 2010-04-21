@@ -1,4 +1,12 @@
-magicmouse (1.1) UNRELEASED; urgency=low
+magicmouse (1.2) UNRELEASED; urgency=low
+
+  * Add hid-cando driver
+  * hid-egalax MT fixes
+  * Let hid-input accept digitizers
+
+ -- Chase Douglas <chase.douglas@ubuntu.com>  Wed, 21 Apr 2010 14:18:42 -0400
+
+magicmouse (1.1) lucid; urgency=low
 
   * Fix package to be binary-indep
 

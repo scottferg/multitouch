@@ -3,7 +3,7 @@ PACKAGE_VERSION="#VERSION#"
 CLEAN="rm -f *.*o"
 AUTOINSTALL="yes"
 
-MAKE[0]="make -C $kernel_source_dir M=$dkms_tree/$PACKAGE_NAME/$PACKAGE_VERSION/build CONFIG_HID_MAGICMOUSE=m modules"
+MAKE[0]="make -C $kernel_source_dir M=$dkms_tree/$PACKAGE_NAME/$PACKAGE_VERSION/build CONFIG_HID_CANDO=m CONFIG_HID_EGALAX=m CONFIG_HID_MAGICMOUSE=m modules"
 
 BUILT_MODULE_NAME[0]="usbhid"
 BUILT_MODULE_LOCATION[0]="drivers/hid/usbhid"

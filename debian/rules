@@ -13,10 +13,12 @@ HID_MODULES = 	hid \
 		hid-a4tech \
 		hid-apple \
 		hid-belkin \
+		hid-cando \
 		hid-cherry \
 		hid-chicony \
 		hid-cypress \
 		hid-drff \
+		hid-egalax \
 		hid-ezkey \
 		hid-gaff \
 		hid-gyration \
