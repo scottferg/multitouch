@@ -6,9 +6,8 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 VERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1 | cut -d\: -f2)
 PKG_kernel_src  := multitouch-kernel-source
 
-HID_MODULES=hid apple
-
 HID_MODULES = 	hid \
+		hid-3m-pct \
 		hid-a4tech \
 		hid-apple \
 		hid-belkin \
@@ -27,13 +26,22 @@ HID_MODULES = 	hid \
 		hid-magicmouse \
 		hid-microsoft \
 		hid-monterey \
+		hid-mosart \
 		hid-ntrig \
 		hid-ortek \
 		hid-petalynx \
 		hid-pl \
+		hid-quanta \
 		hid-samsung \
 		hid-sjoy \
-		hid-sony
+		hid-sony \
+		hid-stantum \
+		hid-sunplus \
+		hid-tmff \
+		hid-topseed \
+		hid-twinhan \
+		hid-wacom \
+		hid-zpff
 
 export i := 2
 configure/$(PKG_kernel_src)::
