@@ -16,7 +16,7 @@
 #include <linux/hid.h>
 #include <linux/module.h>
 
-MODULE_VERSION("0.6");
+MODULE_VERSION("0.6.1");
 MODULE_AUTHOR("Stephane Chatty <chatty@enac.fr>");
 MODULE_DESCRIPTION("Stantum HID multitouch panels");
 MODULE_LICENSE("GPL");

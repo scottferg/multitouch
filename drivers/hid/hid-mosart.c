@@ -19,7 +19,7 @@
 #include <linux/usb.h>
 #include "usbhid/usbhid.h"
 
-MODULE_VERSION("1.00");
+MODULE_VERSION("1.00.1");
 MODULE_AUTHOR("Stephane Chatty <chatty@enac.fr>");
 MODULE_DESCRIPTION("MosArt dual-touch panel");
 MODULE_LICENSE("GPL");
