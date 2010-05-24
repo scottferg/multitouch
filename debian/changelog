@@ -1,3 +1,10 @@
+multitouch (1.5) lucid; urgency=low
+
+  * Fix eGalax Touchcontroller event report definitions
+  * Fix Magic Mouse initialization when HIDRAW is not available
+
+ -- Chase Douglas <chase.douglas@ubuntu.com>  Mon, 24 May 2010 10:49:35 -0400
+
 multitouch (1.4) lucid; urgency=low
 
   * Some hid drivers were skipped, added them in
