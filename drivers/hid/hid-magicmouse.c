@@ -29,6 +29,14 @@ static bool emulate_scroll_wheel = true;
 module_param(emulate_scroll_wheel, bool, 0644);
 MODULE_PARM_DESC(emulate_scroll_wheel, "Emulate a scroll wheel");
 
+static bool use_whole_vertical_surface = true;
+module_param(use_whole_vertical_surface, bool, 0644);
+MODULE_PARM_DESC(use_whole_vertical_surface, "Use whole surface as a vertical wheel");
+
+static bool emulate_horizontal_scroll_wheel = true;
+module_param(emulate_horizontal_scroll_wheel, bool, 0644);
+MODULE_PARM_DESC(emulate_horizontal_scroll_wheel, "Emulate a horizontal scroll wheel");
+
 static bool report_touches = true;
 module_param(report_touches, bool, 0644);
 MODULE_PARM_DESC(report_touches, "Emit touch records (otherwise, only use them for emulation)");
@@ -59,7 +67,8 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
  * @delta_time: 18-bit difference between the two most recent touch
  *     reports from the mouse.
  * @ntouches: Number of touches in most recent touch report.
- * @scroll_accel: Number of consecutive scroll motions.
+ * @scroll_accel_x: Number of consecutive horizontal scroll motions.
+ * @scroll_accel_y: Number of consecutive vertical scroll motions.
  * @scroll_jiffies: Time of last scroll motion.
  * @touches: Most recent data for a touch, indexed by tracking ID.
  * @tracking_ids: Mapping of current touch input data to @touches.
@@ -71,12 +80,14 @@ struct magicmouse_sc {
 	int last_timestamp;
 	int delta_time;
 	int ntouches;
-	int scroll_accel;
+	int scroll_accel_y;
+	int scroll_accel_x;
 	unsigned long scroll_jiffies;
 
 	struct {
 		short x;
 		short y;
+		short scroll_x;
 		short scroll_y;
 		u8 size;
 	} touches[16];
@@ -139,8 +150,10 @@ static void magicmouse_emit_buttons(struct magicmouse_sc *msc, int state)
 	input_report_key(msc->input, BTN_LEFT, state & 1);
 	input_report_key(msc->input, BTN_RIGHT, state & 2);
 
-	if (state != last_state)
-		msc->scroll_accel = 0;
+	if (state != last_state) {
+		msc->scroll_accel_x = 0;
+		msc->scroll_accel_y = 0;
+	}
 }
 
 static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tdata)
@@ -162,26 +175,27 @@ static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tda
 	 * vertical touch motions along the middle of the mouse.
 	 */
 	if (emulate_scroll_wheel &&
-	    middle_button_start < x && x < middle_button_stop) {
+	    ((middle_button_start < x && x < middle_button_stop) ||
+	    use_whole_vertical_surface)) {
 		static const int accel_profile[] = {
-			256, 228, 192, 160, 128, 96, 64, 32,
+			168, 132, 112, 90, 64, 32, 16, 8,
 		};
 		unsigned long now = jiffies;
 		int step = msc->touches[id].scroll_y - y;
 
 		/* Reset acceleration after half a second. */
 		if (time_after(now, msc->scroll_jiffies + HZ / 2))
-			msc->scroll_accel = 0;
+			msc->scroll_accel_y = 0;
 
 		/* Calculate and apply the scroll motion. */
 		switch (tdata[7] & TOUCH_STATE_MASK) {
 		case TOUCH_STATE_START:
 			msc->touches[id].scroll_y = y;
-			msc->scroll_accel = min_t(int, msc->scroll_accel + 1,
+			msc->scroll_accel_y = min_t(int, msc->scroll_accel_y + 1,
 						ARRAY_SIZE(accel_profile) - 1);
 			break;
 		case TOUCH_STATE_DRAG:
-			step = step / accel_profile[msc->scroll_accel];
+			step = step / accel_profile[msc->scroll_accel_y];
 			if (step != 0) {
 				msc->touches[id].scroll_y = y;
 				msc->scroll_jiffies = now;
@@ -190,6 +204,41 @@ static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tda
 			break;
 		}
 	}
+
+
+	/* If requested, emulate a horizontal scroll wheel by detecting
+	 * horizontal touch motions on whole touch area.
+	 */
+	if (emulate_horizontal_scroll_wheel) {
+		static const int accel_profile[] = {
+			80, 64, 32, 16, 8, 4,
+		};
+		unsigned long now = jiffies;
+		int step = msc->touches[id].scroll_x - x;
+
+		/* Reset acceleration after half a second. */
+		if (time_after(now, msc->scroll_jiffies + HZ / 2))
+			msc->scroll_accel_x = 0;
+
+		/* Calculate and apply the scroll motion. */
+		switch (tdata[7] & TOUCH_STATE_MASK) {
+		case TOUCH_STATE_START:
+			msc->touches[id].scroll_x = x;
+			msc->scroll_accel_x = min_t(int, msc->scroll_accel_x + 1,
+						ARRAY_SIZE(accel_profile) - 1);
+			break;
+		case TOUCH_STATE_DRAG:
+			step = -step / accel_profile[msc->scroll_accel_x];
+			if (step != 0) {
+				msc->touches[id].scroll_x = x;
+				msc->scroll_jiffies = now;
+				input_report_rel(input, REL_HWHEEL, step);
+			}
+			break;
+		}
+	}
+
+
 
 	/* Generate the input events for this touch. */
 	if (report_touches) {
@@ -302,6 +351,8 @@ static void magicmouse_setup_input(struct input_dev *input, struct hid_device *h
 	__set_bit(REL_Y, input->relbit);
 	if (emulate_scroll_wheel)
 		__set_bit(REL_WHEEL, input->relbit);
+	if (emulate_horizontal_scroll_wheel)
+		__set_bit(REL_HWHEEL, input->relbit);
 
 	if (report_touches) {
 		__set_bit(EV_ABS, input->evbit);
